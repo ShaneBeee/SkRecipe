@@ -1,0 +1,5 @@
+main: tk.shanebee.skrecipe.SkRecipe
+name: SkRecipe
+version: ${project.version}
+author: ShaneBee
+api-version: '1.13'
