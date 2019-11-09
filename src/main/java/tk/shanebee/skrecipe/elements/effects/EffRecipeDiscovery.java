@@ -14,7 +14,8 @@ import org.bukkit.event.Event;
 import tk.shanebee.skrecipe.SkRecipe;
 
 @Name("Recipe - Discovery")
-@Description("Lock/Unlock recipes for players. This uses the IDs we created earlier when registering recipes.")
+@Description("Lock/Unlock recipes for players. This uses the IDs we created earlier when registering recipes, " +
+        "you can also lock/unlock minecraft recipes.")
 @Examples({"unlock recipe \"smoking_cod\" for all players",
         "on pickup of diamonds:",
         "\tdiscover recipe \"fancy_diamonds\" for player"})
@@ -24,20 +25,23 @@ public class EffRecipeDiscovery extends Effect {
 
     static {
         Skript.registerEffect(EffRecipeDiscovery.class,
-                "(0¦(discover|unlock)|1¦(undiscover|lock)) recipe[s] [with id[s]] %strings% for %players%");
+                "(discover|unlock) [(custom|1¦(mc|minecraft)] recipe[s] [with id[s]] %strings% for %players%",
+                "(undiscover|lock) [(custom|1¦(mc|minecraft)] recipe[s] [with id[s]] %strings% for %players%");
     }
 
     @SuppressWarnings("null")
     private Expression<String> recipes;
     private Expression<Player> players;
     private boolean discover;
+    private boolean minecraft;
 
     @SuppressWarnings({"unchecked", "null"})
     @Override
-    public boolean init(Expression<?>[] exprs, int i, Kleenean kleenean, ParseResult parseResult) {
+    public boolean init(Expression<?>[] exprs, int pattern, Kleenean kleenean, ParseResult parseResult) {
         recipes = (Expression<String>) exprs[0];
         players = (Expression<Player>) exprs[1];
-        discover = parseResult.mark == 0;
+        discover =  pattern == 0;
+        minecraft = parseResult.mark == 1;
         return true;
     }
 
@@ -47,7 +51,12 @@ public class EffRecipeDiscovery extends Effect {
         String[] recipes = this.recipes.getAll(event);
         for (Player player : players) {
             for (String recipe : recipes) {
-                NamespacedKey key = new NamespacedKey(plugin, recipe);
+                NamespacedKey key;
+                if (minecraft)
+                    key = NamespacedKey.minecraft(recipe);
+                else
+                    key = new NamespacedKey(plugin, recipe);
+
                 if (discover)
                     player.discoverRecipe(key);
                 else
