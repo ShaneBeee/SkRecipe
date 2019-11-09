@@ -29,7 +29,7 @@ public class EffKnowledgeBook extends Effect {
     static {
         Skript.registerEffect(EffKnowledgeBook.class,
                 "add [(custom|1¦(mc|minecraft))] [recipe[s]] [with id[s]] %strings% to %itemtype%",
-                "remove [(custom|1¦(mc|minecraft)] [recipe[s]] [with id[s]] %strings% from %itemtype%");
+                "remove [(custom|1¦(mc|minecraft))] [recipe[s]] [with id[s]] %strings% from %itemtype%");
     }
 
     private Expression<String> recipes;
