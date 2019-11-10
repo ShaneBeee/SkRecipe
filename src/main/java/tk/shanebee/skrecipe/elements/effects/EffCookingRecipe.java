@@ -43,7 +43,7 @@ public class EffCookingRecipe extends Effect {
             Skript.registerEffect(EffCookingRecipe.class,
                     "register [new] (0¦furnace|1¦(blast furnance|blasting)|2¦smok(er|ing)|3¦campfire) recipe for %itemtype% " +
                             "(using|with ingredient) %itemtype% with id %string% [[and ]with exp[erience] %-number%] " +
-                            "[[and ]with cook[ ]time %-timespan%] [in group %-string]");
+                            "[[and ]with cook[ ]time %-timespan%] [in group %-string%]");
         }
     }
 
