@@ -2,4 +2,6 @@ main: tk.shanebee.skrecipe.SkRecipe
 name: SkRecipe
 version: ${project.version}
 author: ShaneBee
+softdepend: [Skript]
 api-version: '1.13'
+website: https://github.com/ShaneBeee/SkRecipe
