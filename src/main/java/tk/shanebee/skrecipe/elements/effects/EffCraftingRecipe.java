@@ -64,6 +64,8 @@ public class EffCraftingRecipe extends Effect {
     @Override
     protected void execute(Event event) {
         ItemType item = this.item.getSingle(event);
+        if (item == null) return;
+
         ItemType[] ingredients = this.ingredients.getAll(event);
         String group = this.group != null ? this.group.getSingle(event) : null;
         NamespacedKey key = new NamespacedKey(SkRecipe.getInstance(), this.key.getSingle(event));
