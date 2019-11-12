@@ -58,6 +58,18 @@ public class EffStonecuttingRecipe extends Effect {
     protected void execute(Event event) {
         ItemType item = this.item.getSingle(event);
         ItemType ingredient = this.ingredient.getSingle(event);
+
+        if (item == null) {
+            Skript.error("Error registering stonecutting recipe - result is null");
+            Skript.error("Current Item: §6" + this.toString(event, true));
+            return;
+        }
+        if (ingredient == null) {
+            Skript.error("Error registering stonecutting recipe - ingredient is null");
+            Skript.error("Current Item: §6" + this.toString(event, true));
+            return;
+        }
+
         String group = this.group != null ? this.group.getSingle(event) : "";
 
         NamespacedKey key = new NamespacedKey(SkRecipe.getInstance(), this.key.getSingle(event));

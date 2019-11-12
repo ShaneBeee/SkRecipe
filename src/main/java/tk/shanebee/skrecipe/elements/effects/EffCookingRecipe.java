@@ -77,14 +77,28 @@ public class EffCookingRecipe extends Effect {
     @SuppressWarnings("deprecation")
     @Override
     protected void execute(Event event) {
+        ItemType res = this.item.getSingle(event);
+        ItemType ing = this.ingredient.getSingle(event);
+        if (res == null) {
+            Skript.error("Error registering cooking recipe - result is null");
+            Skript.error("Current Item: §6" + this.toString(event, true));
+            return;
+        }
+        if (ing == null) {
+            Skript.error("Error registering cooking recipe - ingredient is null");
+            Skript.error("Current Item: §6" + this.toString(event, true));
+            return;
+        }
+
+        ItemStack result = res.getRandom();
+
         NamespacedKey key = new NamespacedKey(SkRecipe.getInstance(), this.key.getSingle(event));
 
         CookingRecipe recipe;
         float xp = experience != null ? experience.getSingle(event).floatValue() : 0;
         int cookTime;
 
-        ItemStack result = this.item.getSingle(event).getRandom();
-        RecipeChoice.ExactChoice ingredient = new RecipeChoice.ExactChoice(this.ingredient.getSingle(event).getRandom());
+        RecipeChoice.ExactChoice ingredient = new RecipeChoice.ExactChoice(ing.getRandom());
         String group = this.group != null ? this.group.getSingle(event) : "";
 
         switch (recipeType) {

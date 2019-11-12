@@ -65,8 +65,17 @@ public class EffCraftingRecipe extends Effect {
     protected void execute(Event event) {
         ItemType item = this.item.getSingle(event);
         ItemType[] ingredients = this.ingredients.getAll(event);
-        if (item == null) return;
-        if (ingredients == null) return;
+
+        if (item == null) {
+            Skript.error("Error registering crafting recipe - result is null");
+            Skript.error("Current Item: §6" + this.toString(event, true));
+            return;
+        }
+        if (ingredients == null) {
+            Skript.error("Error registering crafting recipe - ingredient is null");
+            Skript.error("Current Item: §6" + this.toString(event, true));
+            return;
+        }
 
         String group = this.group != null ? this.group.getSingle(event) : null;
         NamespacedKey key = new NamespacedKey(SkRecipe.getInstance(), this.key.getSingle(event));
