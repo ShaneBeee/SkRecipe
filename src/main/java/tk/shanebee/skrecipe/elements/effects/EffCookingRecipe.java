@@ -3,7 +3,11 @@ package tk.shanebee.skrecipe.elements.effects;
 import ch.njol.skript.ScriptLoader;
 import ch.njol.skript.Skript;
 import ch.njol.skript.aliases.ItemType;
-import ch.njol.skript.doc.*;
+import ch.njol.skript.doc.Description;
+import ch.njol.skript.doc.Examples;
+import ch.njol.skript.doc.Name;
+import ch.njol.skript.doc.RequiredPlugins;
+import ch.njol.skript.doc.Since;
 import ch.njol.skript.events.bukkit.SkriptStartEvent;
 import ch.njol.skript.lang.Effect;
 import ch.njol.skript.lang.Expression;
@@ -13,9 +17,17 @@ import ch.njol.util.Kleenean;
 import org.bukkit.Bukkit;
 import org.bukkit.NamespacedKey;
 import org.bukkit.event.Event;
-import org.bukkit.inventory.*;
+import org.bukkit.inventory.BlastingRecipe;
+import org.bukkit.inventory.CampfireRecipe;
+import org.bukkit.inventory.CookingRecipe;
+import org.bukkit.inventory.FurnaceRecipe;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.Recipe;
+import org.bukkit.inventory.RecipeChoice;
+import org.bukkit.inventory.SmokingRecipe;
 import tk.shanebee.skrecipe.SkRecipe;
 
+@SuppressWarnings("deprecation")
 @Name("Recipe - Cooking")
 @Description("Register new cooking recipes. " +
         "On 1.13+ you can register recipes for furnaces. " +
@@ -41,7 +53,7 @@ public class EffCookingRecipe extends Effect {
                             "[[and ]with cook[ ]time %-timespan%] [in group %-string%]");
         } else {
             Skript.registerEffect(EffCookingRecipe.class,
-                    "register [new] (0¦furnace|1¦(blast furnance|blasting)|2¦smok(er|ing)|3¦campfire) recipe for %itemtype% " +
+                    "register [new] (0¦furnace|1¦(blast furnace|blasting)|2¦smok(er|ing)|3¦campfire) recipe for %itemtype% " +
                             "(using|with ingredient) %itemtype% with id %string% [[and ]with exp[erience] %-number%] " +
                             "[[and ]with cook[ ]time %-timespan%] [in group %-string%]");
         }
@@ -91,16 +103,30 @@ public class EffCookingRecipe extends Effect {
         }
 
         ItemStack result = res.getRandom();
-
-        NamespacedKey key = new NamespacedKey(SkRecipe.getInstance(), this.key.getSingle(event));
-
-        CookingRecipe recipe;
-        float xp = experience != null ? experience.getSingle(event).floatValue() : 0;
-        int cookTime;
-
         RecipeChoice.ExactChoice ingredient = new RecipeChoice.ExactChoice(ing.getRandom());
         String group = this.group != null ? this.group.getSingle(event) : "";
+        NamespacedKey key = new NamespacedKey(SkRecipe.getInstance(), this.key.getSingle(event));
+        float xp = experience != null ? experience.getSingle(event).floatValue() : 0;
 
+        if (HAS_BLASTING)
+            cookingRecipe(event, result, ingredient, group, key, xp);
+        else
+            furnaceRecipe(event,result, ingredient, group, key, xp);
+    }
+
+    private void furnaceRecipe(Event event, ItemStack result, RecipeChoice.ExactChoice ingredient, String group, NamespacedKey key, float xp) {
+        FurnaceRecipe recipe;
+        int cookTime;
+        cookTime = this.cookTime != null ? ((int) this.cookTime.getSingle(event).getTicks_i()) : 200;
+        recipe = new FurnaceRecipe(key, result, ingredient, xp, cookTime);
+
+        recipe.setGroup(group);
+        Bukkit.addRecipe(recipe);
+    }
+
+    private void cookingRecipe(Event event, ItemStack result, RecipeChoice.ExactChoice ingredient, String group, NamespacedKey key, float xp) {
+        Recipe recipe;
+        int cookTime;
         switch (recipeType) {
             case 1: // BLASTING
                 cookTime = this.cookTime != null ? ((int) this.cookTime.getSingle(event).getTicks_i()) : 100;
@@ -119,7 +145,7 @@ public class EffCookingRecipe extends Effect {
                 recipe = new FurnaceRecipe(key, result, ingredient, xp, cookTime);
         }
 
-        recipe.setGroup(group);
+        ((CookingRecipe) recipe).setGroup(group);
         Bukkit.addRecipe(recipe);
     }
 
