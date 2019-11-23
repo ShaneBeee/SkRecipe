@@ -16,6 +16,7 @@ import org.bukkit.event.Event;
 import org.bukkit.inventory.RecipeChoice;
 import org.bukkit.inventory.ShapedRecipe;
 import org.bukkit.inventory.ShapelessRecipe;
+import tk.shanebee.skrecipe.Config;
 import tk.shanebee.skrecipe.SkRecipe;
 
 @Name("Recipe - Shaped/Shapeless")
@@ -33,6 +34,8 @@ import tk.shanebee.skrecipe.SkRecipe;
 @RequiredPlugins("1.13+")
 @Since("1.0.0")
 public class EffCraftingRecipe extends Effect {
+
+    private Config config = SkRecipe.getInstance().getPluginConfig();
 
     static {
         Skript.registerEffect(EffCraftingRecipe.class,
@@ -67,13 +70,13 @@ public class EffCraftingRecipe extends Effect {
         ItemType[] ingredients = this.ingredients.getAll(event);
 
         if (item == null) {
-            Skript.error("Error registering crafting recipe - result is null");
-            Skript.error("Current Item: §6" + this.toString(event, true));
+            SkRecipe.error("Error registering crafting recipe - result is null");
+            SkRecipe.error("Current Item: §6" + this.toString(event, true));
             return;
         }
         if (ingredients == null) {
-            Skript.error("Error registering crafting recipe - ingredient is null");
-            Skript.error("Current Item: §6" + this.toString(event, true));
+            SkRecipe.error("Error registering crafting recipe - ingredient is null");
+            SkRecipe.error("Current Item: §6" + this.toString(event, true));
             return;
         }
 
@@ -121,6 +124,7 @@ public class EffCraftingRecipe extends Effect {
                 recipe.setIngredient(keyChar[i], new RecipeChoice.ExactChoice(ingredients[i].getRandom()));
             }
         }
+        SkRecipe.log("Recipe: " + recipe.getIngredientMap().toString());
         Bukkit.addRecipe(recipe);
     }
 
@@ -130,7 +134,16 @@ public class EffCraftingRecipe extends Effect {
         if (group != null) recipe.setGroup(group);
 
         for (ItemType ingredient : ingredients) {
-            recipe.addIngredient(new RecipeChoice.ExactChoice(ingredient.getRandom()));
+            // Exclude non-items from shapeless recipes (produced IllegalArgumentException)
+            if (ingredient.getMaterial() != Material.AIR && ingredient.getMaterial().isItem()) {
+                recipe.addIngredient(new RecipeChoice.ExactChoice(ingredient.getRandom()));
+            } else {
+                if (config.DEBUG) {
+                    SkRecipe.warn("ERROR LOADING RECIPE:");
+                    SkRecipe.warn("Non item &b" + ingredient + "&e found in recipe with ID &b" + key.getKey() +
+                            "&e, this item will be removed from the recipe.");
+                }
+            }
         }
         Bukkit.addRecipe(recipe);
     }

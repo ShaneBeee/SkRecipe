@@ -13,11 +13,13 @@ import java.io.IOException;
 public class SkRecipe extends JavaPlugin {
 
     private static SkRecipe instance;
+    private Config config;
 
     @Override
     public void onEnable() {
         instance = this;
         PluginDescriptionFile desc = getDescription();
+        this.config = new Config(this);
 
         if ((Bukkit.getPluginManager().getPlugin("Skript") != null) && (Skript.isAcceptRegistrations())) {
             SkriptAddon addon = Skript.registerAddon(this);
@@ -53,6 +55,10 @@ public class SkRecipe extends JavaPlugin {
         return instance;
     }
 
+    public Config getPluginConfig() {
+        return this.config;
+    }
+
     public static void log(String message) {
         String prefix = "&7[&bSkRecipe&7] ";
         Bukkit.getConsoleSender().sendMessage(ChatColor.translateAlternateColorCodes('&', prefix + message));
@@ -61,6 +67,11 @@ public class SkRecipe extends JavaPlugin {
     public static void error(String error) {
         String prefix = "&7[&bSkRecipe&7] &c";
         Bukkit.getLogger().severe(ChatColor.translateAlternateColorCodes('&', prefix + error));
+    }
+
+    public static void warn(String warning) {
+        String prefix = "&7[&bSkRecipe&7] &e";
+        Bukkit.getLogger().warning(ChatColor.translateAlternateColorCodes('&', prefix + warning));
     }
 
 }
