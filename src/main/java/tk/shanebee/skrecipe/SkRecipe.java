@@ -9,6 +9,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.IOException;
 
+@SuppressWarnings("WeakerAccess")
 public class SkRecipe extends JavaPlugin {
 
     private static SkRecipe instance;
@@ -21,8 +22,8 @@ public class SkRecipe extends JavaPlugin {
         if ((Bukkit.getPluginManager().getPlugin("Skript") != null) && (Skript.isAcceptRegistrations())) {
             SkriptAddon addon = Skript.registerAddon(this);
             if (!Skript.isRunningMinecraft(1, 13)) {
-                log("&cThis addon is not supported on your version.");
-                log("&7SkRecipe only supports 1.13+");
+                error("&cThis addon is not supported on your version.");
+                error("&7SkRecipe only supports 1.13+");
                 Bukkit.getPluginManager().disablePlugin(this);
                 return;
             }
@@ -39,7 +40,7 @@ public class SkRecipe extends JavaPlugin {
                 log("&ehttps://github.com/ShaneBeee/SkRecipe/issues");
             }
         } else {
-            log("&cDependency Skript was not found, plugin disabling");
+            error("&cDependency Skript was not found, plugin disabling");
             Bukkit.getPluginManager().disablePlugin(this);
         }
     }
@@ -52,9 +53,14 @@ public class SkRecipe extends JavaPlugin {
         return instance;
     }
 
-    public void log(String message) {
+    public static void log(String message) {
         String prefix = "&7[&bSkRecipe&7] ";
         Bukkit.getConsoleSender().sendMessage(ChatColor.translateAlternateColorCodes('&', prefix + message));
+    }
+
+    public static void error(String error) {
+        String prefix = "&7[&bSkRecipe&7] &c";
+        Bukkit.getLogger().severe(ChatColor.translateAlternateColorCodes('&', prefix + error));
     }
 
 }
