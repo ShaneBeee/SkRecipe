@@ -1,0 +1,4 @@
+# SkRecipe Config
+
+# Enabled debugging if you would like to see more thorough errors/warnings in the console
+debug: false
