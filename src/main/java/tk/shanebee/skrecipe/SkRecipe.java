@@ -4,6 +4,7 @@ import ch.njol.skript.Skript;
 import ch.njol.skript.SkriptAddon;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.inventory.Recipe;
 import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -72,6 +73,12 @@ public class SkRecipe extends JavaPlugin {
     public static void warn(String warning) {
         String prefix = "&7[&bSkRecipe&7] &e";
         Bukkit.getLogger().warning(ChatColor.translateAlternateColorCodes('&', prefix + warning));
+    }
+
+    public static void logRecipe(Recipe recipe, String ingredients) {
+        log("&aRegistered new recipe:");
+        log(" - &7Result: " + recipe.getResult());
+        log(" - &7Ingredients: " + ingredients);
     }
 
 }
