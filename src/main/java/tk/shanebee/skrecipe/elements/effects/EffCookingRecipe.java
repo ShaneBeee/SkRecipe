@@ -25,6 +25,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.Recipe;
 import org.bukkit.inventory.RecipeChoice;
 import org.bukkit.inventory.SmokingRecipe;
+import tk.shanebee.skrecipe.Config;
 import tk.shanebee.skrecipe.SkRecipe;
 
 @SuppressWarnings("deprecation")
@@ -44,6 +45,7 @@ import tk.shanebee.skrecipe.SkRecipe;
 public class EffCookingRecipe extends Effect {
 
     private static final boolean HAS_BLASTING = Skript.isRunningMinecraft(1, 14);
+    private Config config = SkRecipe.getInstance().getPluginConfig();
 
     static {
         if (!HAS_BLASTING) {
@@ -122,6 +124,9 @@ public class EffCookingRecipe extends Effect {
 
         recipe.setGroup(group);
         Bukkit.addRecipe(recipe);
+        if (config.DEBUG) {
+            SkRecipe.logRecipe(recipe, recipe.getInputChoice().toString());
+        }
     }
 
     private void cookingRecipe(Event event, ItemStack result, RecipeChoice.ExactChoice ingredient, String group, NamespacedKey key, float xp) {
@@ -147,6 +152,9 @@ public class EffCookingRecipe extends Effect {
 
         ((CookingRecipe) recipe).setGroup(group);
         Bukkit.addRecipe(recipe);
+        if (config.DEBUG) {
+            SkRecipe.logRecipe(recipe, ((CookingRecipe) recipe).getInputChoice().toString());
+        }
     }
 
     @Override

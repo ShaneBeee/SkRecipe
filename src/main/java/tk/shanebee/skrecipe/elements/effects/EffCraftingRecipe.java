@@ -124,7 +124,9 @@ public class EffCraftingRecipe extends Effect {
                 recipe.setIngredient(keyChar[i], new RecipeChoice.ExactChoice(ingredients[i].getRandom()));
             }
         }
-        SkRecipe.log("Recipe: " + recipe.getIngredientMap().toString());
+        if (config.DEBUG) {
+            SkRecipe.logRecipe(recipe, recipe.getIngredientMap().toString());
+        }
         Bukkit.addRecipe(recipe);
     }
 
@@ -146,6 +148,9 @@ public class EffCraftingRecipe extends Effect {
             }
         }
         Bukkit.addRecipe(recipe);
+        if (config.DEBUG) {
+            SkRecipe.logRecipe(recipe, recipe.getIngredientList().toString());
+        }
     }
 
     @Override

@@ -10,6 +10,8 @@ import ch.njol.skript.lang.Expression;
 import ch.njol.skript.lang.SkriptParser;
 import ch.njol.util.Kleenean;
 import org.bukkit.event.Event;
+import tk.shanebee.skrecipe.Config;
+import tk.shanebee.skrecipe.SkRecipe;
 import tk.shanebee.skrecipe.recipe.Remover;
 
 @Name("Recipe - Remove")
@@ -22,6 +24,7 @@ import tk.shanebee.skrecipe.recipe.Remover;
 public class EffRemoveRecipe extends Effect {
 
     private static Remover REMOVER = null;
+    private Config config = SkRecipe.getInstance().getPluginConfig();
 
     static {
         try {
@@ -53,6 +56,9 @@ public class EffRemoveRecipe extends Effect {
                 recipe = recipe.replace("minecraft:", "");
             }
             REMOVER.removeRecipeByKey(recipe);
+            if (config.DEBUG) {
+                SkRecipe.log("&aRemoving recipe: minecraft:" + recipe);
+            }
         }
     }
 

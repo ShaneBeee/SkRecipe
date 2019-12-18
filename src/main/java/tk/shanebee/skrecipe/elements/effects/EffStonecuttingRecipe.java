@@ -14,6 +14,7 @@ import org.bukkit.NamespacedKey;
 import org.bukkit.event.Event;
 import org.bukkit.inventory.RecipeChoice;
 import org.bukkit.inventory.StonecuttingRecipe;
+import tk.shanebee.skrecipe.Config;
 import tk.shanebee.skrecipe.SkRecipe;
 
 @Name("Recipe - StoneCutting")
@@ -25,6 +26,8 @@ import tk.shanebee.skrecipe.SkRecipe;
 @RequiredPlugins("1.14+")
 @Since("1.0.0")
 public class EffStonecuttingRecipe extends Effect {
+
+    private Config config = SkRecipe.getInstance().getPluginConfig();
 
     static {
         if (Skript.isRunningMinecraft(1, 14)) {
@@ -79,6 +82,9 @@ public class EffStonecuttingRecipe extends Effect {
         recipe.setGroup(group);
 
         Bukkit.addRecipe(recipe);
+        if (config.DEBUG) {
+            SkRecipe.logRecipe(recipe, recipe.getInputChoice().toString());
+        }
     }
 
     @Override
