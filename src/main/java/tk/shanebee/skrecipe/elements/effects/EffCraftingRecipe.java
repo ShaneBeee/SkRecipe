@@ -21,7 +21,8 @@ import tk.shanebee.skrecipe.SkRecipe;
 
 @Name("Recipe - Shaped/Shapeless")
 @Description("Register a new shaped/shapeless recipe for a specific item using custom ingredients. " +
-        "The ID will be the name given to this recipe. Used for recipe discovery/unlocking recipes for players. " +
+        "The ID will be the name given to this recipe. IDs may only contain letters, numbers, periods, hyphens and underscores." +
+        " Used for recipe discovery/unlocking recipes for players. " +
         "You may also include an optional group for recipes. These will group the recipes together in the recipe book. " +
         "Recipes must be registered in a <b>Skript load event</b>" +
         "\n<b>NOTE:</b> Recipes with 4 or less ingredients will be craftable in the player's crafting grid.")
