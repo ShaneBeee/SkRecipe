@@ -22,6 +22,10 @@ public class Remover {
     }
 
     public void removeRecipeByKey(String recipeKey) {
+        if (recipeKey.equals("*")) {
+            removeAll();
+            return;
+        }
         Object key;
         try {
             key = keyConstructor.newInstance(recipeKey);
@@ -30,6 +34,11 @@ public class Remover {
             //e.printStackTrace();
         }
         recipeMap.values().forEach(recipes -> recipes.entrySet().removeIf(entry -> entry.getKey().equals(key)));
+    }
+
+    public void removeAll() {
+        recipeMap.values().forEach(recipes -> recipes.entrySet().removeIf(entry ->
+                entry.getKey().toString().contains("minecraft:")));
     }
 
     @SuppressWarnings("unchecked")
