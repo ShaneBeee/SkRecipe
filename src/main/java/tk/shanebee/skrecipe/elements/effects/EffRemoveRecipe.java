@@ -18,7 +18,8 @@ import tk.shanebee.skrecipe.recipe.Remover;
 @Description({"Remove a vanilla Minecraft recipe from your server. Recipes can be removed at any time ",
         "but it is best to do so during a server load event. If a recipe is removed whilst a player is online ",
         "it will still show up in their recipe book, but they will not be able to craft it. If need be, you can get ",
-        "a list of all recipes by simply typing \"/minecraft:recipe give YourName \" in game."})
+        "a list of all recipes by simply typing \"/minecraft:recipe give YourName \" in game.",
+        "Note: Remove all minecraft recipes pattern was added in 1.3.4"})
 @Examples({"remove mc recipe \"acacia_boat\"", "remove minecraft recipe \"cooked_chicken_from_campfire_cooking\"",
         "remove all minecraft recipes"})
 @Since("1.3.0")
