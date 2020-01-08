@@ -19,7 +19,8 @@ import tk.shanebee.skrecipe.recipe.Remover;
         "but it is best to do so during a server load event. If a recipe is removed whilst a player is online ",
         "it will still show up in their recipe book, but they will not be able to craft it. If need be, you can get ",
         "a list of all recipes by simply typing \"/minecraft:recipe give YourName \" in game."})
-@Examples({"remove mc recipe \"acacia_boat\"", "remove minecraft recipe \"cooked_chicken_from_campfire_cooking\""})
+@Examples({"remove mc recipe \"acacia_boat\"", "remove minecraft recipe \"cooked_chicken_from_campfire_cooking\"",
+        "remove all minecraft recipes"})
 @Since("1.3.0")
 public class EffRemoveRecipe extends Effect {
 
@@ -30,7 +31,8 @@ public class EffRemoveRecipe extends Effect {
         try {
             REMOVER = new Remover();
             Skript.registerEffect(EffRemoveRecipe.class,
-                    "remove (mc|minecraft) recipe[s] %strings%");
+                    "remove (mc|minecraft) recipe[s] %strings%",
+                    "remove all (mc|minecraft) recipe[s]");
         } catch (ClassNotFoundException | NoSuchMethodException e) {
             Skript.warning("[SkRecipe] - Recipe remover failed to load!");
         }
@@ -38,16 +40,25 @@ public class EffRemoveRecipe extends Effect {
 
     @SuppressWarnings("null")
     private Expression<String> recipes;
+    private boolean all;
 
     @SuppressWarnings("unchecked")
     @Override
-    public boolean init(Expression<?>[] exprs, int i, Kleenean kleenean, SkriptParser.ParseResult parseResult) {
-        recipes = (Expression<String>) exprs[0];
+    public boolean init(Expression<?>[] exprs, int pattern, Kleenean kleenean, SkriptParser.ParseResult parseResult) {
+        all = pattern == 1;
+        recipes = pattern == 0 ? (Expression<String>) exprs[0] : null;
         return true;
     }
 
     @Override
     protected void execute(Event event) {
+        if (all) {
+            REMOVER.removeAll();
+            if (config.DEBUG) {
+                SkRecipe.log("&aRemoving all Minecraft recipes.");
+            }
+            return;
+        }
         String[] recipes = this.recipes.getAll(event);
         if (recipes == null) return;
 
@@ -64,7 +75,11 @@ public class EffRemoveRecipe extends Effect {
 
     @Override
     public String toString(Event e, boolean d) {
-        return "remove minecraft recipes " + recipes.toString(e, d);
+        if (all) {
+            return "remove all minecraft recipes";
+        } else {
+            return "remove minecraft recipes " + recipes.toString(e, d);
+        }
     }
 
 }
